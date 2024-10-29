@@ -7,11 +7,10 @@ const router = Router();
 // POST /recipes - Add a new recipe
 router.post('/recipes', validateRecipe, async (req, res) => {
   try {
-    const recipe = new Recipe(req.body); 
-    await recipe.save(); 
+    const recipe = await Recipe.create(req.body);
     res.status(201).json(recipe);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 

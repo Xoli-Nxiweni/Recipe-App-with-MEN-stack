@@ -1,9 +1,8 @@
 import express from "express";
-import { connect } from "mongoose";
+import { mongoose } from "mongoose";
 import cors from "cors";
 import recipeRoutes from "./routes/recipes.js";
 import env from "dotenv";
-import validateRecipe from "./middleware/validateRecipes.js";
 
 env.config();
 
@@ -15,10 +14,10 @@ app.use(express.json());
 app.use(cors());
 
 // Route
-app.use("/", recipeRoutes, validateRecipe);
+app.use("/", recipeRoutes);
 
 // MongoDB connection
-connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("connection to the DB successful");
     // Start the server
