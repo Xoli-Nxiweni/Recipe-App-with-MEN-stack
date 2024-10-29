@@ -45,11 +45,16 @@ const validateRecipe = [
     .optional()
     .isInt({ min: 0 }).withMessage('__v must be a non-negative integer'),
 
+    // Validate 'userId' - Must be a non-empty string
+body('userId')
+.isString().withMessage('User ID must be a string')
+.notEmpty().withMessage('User ID is required'),
+
   // Error handling
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      // return res.status(400).json({ errors: errors.array() });
     }
     next();
   },

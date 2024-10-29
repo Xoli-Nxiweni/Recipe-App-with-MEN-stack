@@ -1,7 +1,7 @@
 import express from "express";
 import { mongoose } from "mongoose";
 import cors from "cors";
-import recipeRoutes from "./routes/recipes.js";
+import recipeRoutes from "./routes/api.js";
 import env from "dotenv";
 
 env.config();
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 // Route
-app.use("/", recipeRoutes);
+app.use("/api", recipeRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)

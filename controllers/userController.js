@@ -1,6 +1,5 @@
-import express from "express";
-import User from "../models/user.js";
 import bcrypt from "bcrypt"
+import User from "../models/user.js";
 import generateToken from "../utils/index.js";
 
 const registerUser = async (req, res) =>{
@@ -16,6 +15,7 @@ const registerUser = async (req, res) =>{
         const user  = await User.create({
             email,
             password: hashedPassword,
+            role: 'user'
         })
 
         res.status(200).json({
@@ -30,27 +30,56 @@ const registerUser = async (req, res) =>{
        }
 }};
 
-const loginUser = async (req, res) =>{
-    try {
-        const {email, password} = req.body;
-        const user = await User.findOne({email})
+// const loginUser = async (req, res) =>{
+//     try {
+//         const {email, password} = req.body;
+//         const user = await User.findOne({email})
 
-        if(!user || !(await user.matchPasswords(password))){
+//         if(!user || !(await user.matchPasswords(password))){
+//             return res.status(401).json({
+//                 error: "Invalid Login Credentials"
+//             });
+//         }
+
+//         const token = await generateToken(user._id)
+//         res.status(200).json({
+//             _id: user._id,
+//             email: user.email,
+//             role: user.role,
+//             token,
+//         })
+//     } catch (error) {
+//         return res.status(500).json({error: "Internal server error!"})
+//     }
+// }
+
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+
+        // Check if the user exists and if the password matches
+        if (!user || !(await user.matchPasswords(password))) {
             return res.status(401).json({
                 error: "Invalid Login Credentials"
             });
         }
 
-        const token = await generateToken(user._id)
+        // Generate a token for the user
+        const token = await generateToken(user._id);
         res.status(200).json({
             _id: user._id,
             email: user.email,
-            token
-        })
+            role: user.role,
+            token,
+        });
+        // getId(user._id)
     } catch (error) {
-        return res.status(500).json({error: "Internal server error!"})
+        console.error("Login error:", error); // Log the error for debugging
+        return res.status(500).json({ error: error.message || "Internal server error!" });
     }
-}
+};
+
 
 
 export default {
