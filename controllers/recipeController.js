@@ -1,20 +1,15 @@
 import Recipe from "../models/recipe.js";
 
-// const addRecipe = async (req, res) => {
-//     try {
-//       const recipe = await Recipe.create(req.body);
-//       res.status(201).json(recipe);
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
+const ValidateInputs = () =>{
+
+}
 
 const addRecipe = async (req, res) => {
   try {
     // Set userId to the _id of the authenticated user
     const recipeData = {
       ...req.body,
-      userId: req.user._id, // Assign userId from req.user
+      userId: req.user._id,
     };
 
     const recipe = new Recipe(recipeData);
@@ -28,7 +23,7 @@ const addRecipe = async (req, res) => {
 
   const readAllRecipes = async (req, res) => {
     try {
-      const { page = 1, pageSize = 10 } = req.query;
+      const { page = 1, pageSize = 5 } = req.query;
       const skip = (page - 1) * pageSize;
   
       const totalRecipes = await Recipe.countDocuments(); 

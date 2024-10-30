@@ -57,6 +57,16 @@ Follow these steps to get the project running on your local machine:
 
 ## Data Model
 
+##User Credentials
+
+by default, the user that has all the recipes associated with them using these credentials:
+```
+{
+    "email":"mlab@mlab.com",
+    "password":"ml@bAfr1c@"
+}
+```
+
 The recipe data is stored in MongoDB using the following **Mongoose schema**:
 
 ```javascript
