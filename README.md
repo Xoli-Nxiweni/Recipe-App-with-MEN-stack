@@ -42,7 +42,7 @@ Follow these steps to get the project running on your local machine:
    Create a `.env` file in the root of the project with the following content:
 
    ```
-   MONGODB_URI=mongodb://localhost:27017/recipeApp
+   MONGODB_URI=mongodb://localhost:=27017/recipeApp
    PORT=5000
    ```
 

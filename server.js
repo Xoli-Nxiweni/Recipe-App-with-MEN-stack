@@ -16,15 +16,40 @@ app.use(cors());
 // Route
 app.use("/api", recipeRoutes);
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("connection to the DB successful");
-    // Start the server
+// MongoDB connection with current options
+const connectDB = async () => {
+  try {
+    const options = {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 10000
+    };
+
+    await mongoose.connect(process.env.MONGO_URI, options);
+    console.log("Connection to the DB successful");
+    
+    // Start the server after successful DB connection
     app.listen(PORT, (err) => {
-      (err)
-        ? console.log("An error occurred while running the server:", err)
-        : console.log("Server running on port", PORT);
+      if (err) {
+        console.log("An error occurred while running the server:", err);
+        return;
+      }
+      console.log("Server running on port", PORT);
     });
-  })
-  .catch((error) => console.error("Error occurred:", error));
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
+
+// Handle connection events
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected');
+});
+
+// Call the connect function
+connectDB();
